@@ -9,7 +9,9 @@ const { free_platform_access } = require("../helper/free_platform_access");
 const { reportEmailFetcher } = require("./reportemailfetcher");
 const { fillBillingInfo } = require("../helper/fillbillinginfo");
 const { submitreview } = require("../helper/submitreview");
-
+const { fetchPassword } = require("../flows/yopmailpasswordfetcher");
+const { cloudAccess } = require("../helper/cloud_access");
+const { generateHTML } = require("../flows/htmlgenerator");
 
 const users = [];
 async function registerusers(page) {
@@ -59,6 +61,61 @@ async function registerusers(page) {
         await delay(process.env.COMMON_DELAY_ONCLICKS);
     }
 
+
+if(projectType === 'icpr' ){
+     if (process.env.HTML_PAGE_CREATION_FOR_USER_DETAILS === "true") {
+        logger.step("Fetching password for " + email + " STARTED");
+
+        await delay(process.env.COMMON_DELAY_ONCLICKS); // wait for file write
+        const result = await fetchPassword(page, email);
+
+        await delay(process.env.COMMON_DELAY_ONCLICKS);
+
+        logger.step("Fetching password for " + email + " COMPLETED");
+        logger.data("Result", result);
+
+        users.push({ email: email, password: result });
+
+        await delay(1000)
+
+
+        if (users.length == parseInt(process.env.USER_REGISTRATION_COUNT)) {
+            logger.process("Generating HTML report for all users...");
+            logger.data("Users to include in report", users.length);
+            const htmlFilePath = await generateHTML(users);
+
+            if (process.env.OPEN_HTML_PAGES === "true") {
+                logger.process("Opening HTML page...");
+                try {
+
+                    await page.goto(`file://${htmlFilePath}`, {
+                        waitUntil: 'load',
+                    });
+
+                    await page.waitForSelector("#fetch-token", { visible: true, timeout: 10000 });
+                    await page.click("#fetch-token");
+
+
+                      
+                    await page.waitForSelector("#login-btn", { visible: true, timeout: 10000 });
+                    const loginUrl = await page.$eval("#login-btn a", el => el.href);
+                    console.log(loginUrl)
+                    
+                    const newPage = await page.browser().newPage();
+
+                    await cloudAccess(newPage);
+                    await newPage.goto(loginUrl);
+                    
+                    await delay(2000)
+
+                } catch (err) {
+                    logger.error("Failed to open HTML page", err);
+                }
+            }
+        }
+
+    }
+}
     appendUser(email);
     return page;
 }

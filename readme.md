@@ -34,8 +34,7 @@ A centralized browser automation engine designed for **ICPR** and **Tracelo** pl
    *Note: You can also configure everything directly via the Web Dashboard or CLI.*
 
 3. **Launch Automation**
-   - **Web Dashboard**: `npm start` (Visit `http://localhost:3000`)
-   - **Interactive CLI**: `npm run cli`
+   - **Interactive CLI**: `npm start`
 
 ## Project Selection
 

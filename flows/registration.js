@@ -8,6 +8,7 @@ const { useremailtype } = require("../helper/useremailtype");
 const { free_platform_access } = require("../helper/free_platform_access");
 const { reportEmailFetcher } = require("./reportemailfetcher");
 const { fillBillingInfo } = require("../helper/fillbillinginfo");
+const { submitreview } = require("../helper/submitreview");
 
 
 const users = [];
@@ -43,13 +44,18 @@ async function registerusers(page) {
         logger.process("looking for 'See Now' button")
     }
 
-    if (projectType === 'tracelo') {
-        await fillBillingInfo(page, logger);
+    // Unified Payment Flow
+    if (projectType === 'tracelo' || process.env.ENABLE_PAID_PLATFORM != "true") {
+        await handlePayment(page);
         await delay(process.env.COMMON_DELAY_ONCLICKS);
     }
 
-    if (projectType === 'tracelo' || process.env.ENABLE_PAID_PLATFORM != "true") {
-        await handlePayment(page);
+    // Tracelo Specific Post-Payment Steps
+    if (projectType === 'tracelo') {
+        await fillBillingInfo(page, logger);
+        await delay(process.env.COMMON_DELAY_ONCLICKS);
+        
+        await submitreview(page);
         await delay(process.env.COMMON_DELAY_ONCLICKS);
     }
 

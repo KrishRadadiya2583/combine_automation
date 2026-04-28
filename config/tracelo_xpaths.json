@@ -13,7 +13,7 @@
     "card_expiry": "#payment-expiryInput",
     "card_cvv": "#payment-cvcInput",
     "submit_btn": "#submit",
-    "continue_btn": ".continue-btn, button.continue-btn, .hl_cta_wrap"
+    "continue_btn": ".continue-btn"
   },
   "review": {
     "star": ".ant-rate-star:nth-child(4)",

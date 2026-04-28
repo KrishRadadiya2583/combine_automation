@@ -76,8 +76,22 @@ async function handleIcprPayment(page) {
     await delay(process.env.COMMON_DELAY_ONCLICKS);
 
     if (process.env.ENABLE_FREE_PLATFORM_ACCESS != "true" && process.env.ENABLE_PAID_PLATFORM != "true") {
-        await page.waitForSelector(xpaths.payment.continue_btn, { visible: true, timeout: 30000 });
-        await page.click(xpaths.payment.continue_btn);
+        try {
+            await page.waitForSelector(xpaths.payment.continue_btn, { visible: true, timeout: 20000 });
+            const continueBtn = await page.$(xpaths.payment.continue_btn);
+            if (continueBtn) {
+                await continueBtn.click();
+                logger.success("Continue button clicked");
+            } else {
+                logger.warn("Continue button not found by selector, attempting evaluate click");
+                await page.evaluate((selector) => {
+                    const btn = document.querySelector(selector);
+                    if (btn) btn.click();
+                }, xpaths.payment.continue_btn);
+            }
+        } catch (error) {
+            logger.error(`Failed to click continue button: ${error.message}`);
+        }
     }
 
     await delay(process.env.COMMON_DELAY_ONCLICKS);
@@ -153,16 +167,30 @@ async function handleTraceloPayment(page) {
     }
 
     // click on continue to open dashboard
-    await delay(1000);
+    await delay(2000);
 
-    await page.waitForSelector(xpaths.payment.continue_btn, { visible: true, timeout: 30000 });
-    await page.click(xpaths.payment.continue_btn);
+    try {
+        await page.waitForSelector(xpaths.payment.continue_btn, { visible: true, timeout: 20000 });
+        const continueBtn = await page.$(xpaths.payment.continue_btn);
+        if (continueBtn) {
+            await continueBtn.click();
+            logger.success("Continue button clicked");
+        } else {
+            logger.warn("Continue button not found by selector, attempting evaluate click");
+            await page.evaluate((selector) => {
+                const btn = document.querySelector(selector);
+                if (btn) btn.click();
+            }, xpaths.payment.continue_btn);
+        }
+    } catch (error) {
+        logger.error(`Failed to click continue button: ${error.message}`);
+        // Attempt one last time with a broader selector or just log it
+    }
 
-    await delay(process.env.COMMON_DELAY_ONCLICKS);
+    await delay(process.env.COMMON_DELAY_ONCLICKS || 2000);
     logger.success("dashboard load successfull");
 
     await delay(process.env.COMMON_DELAY_ONCLICKS);
-    await submitreview(page);
     
     logger.success("Payment Done");
 }

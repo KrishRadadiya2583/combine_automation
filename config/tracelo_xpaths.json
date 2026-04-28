@@ -1,0 +1,33 @@
+{
+  "search": {
+    "phone_input": "#phone_input_desk_2",
+    "submit_btn": "button[type='submit']",
+    "alternate_submit": ".span-text, [type='submit'], .input-suffix"
+  },
+  "auth": {
+    "email_input": "#input",
+    "register_btn": ".hl_cta_wrap.on-desk"
+  },
+  "payment": {
+    "card_number": "#payment-numberInput",
+    "card_expiry": "#payment-expiryInput",
+    "card_cvv": "#payment-cvcInput",
+    "submit_btn": "#submit",
+    "continue_btn": ".continue-btn, button.continue-btn, .hl_cta_wrap"
+  },
+  "review": {
+    "star": ".ant-rate-star:nth-child(4)",
+    "close_btn": ".ant-modal-close-icon"
+  },
+  "billing": {
+    "first_name": "input[name='first_name']",
+    "last_name": "input[name='last_name']",
+    "address": "input[name='address']",
+    "city": "input[name='city']",
+    "zipcode": "input[name='zipcode']",
+    "save_btn": ".save-billing-btn button"
+  }
+}
+
+
+

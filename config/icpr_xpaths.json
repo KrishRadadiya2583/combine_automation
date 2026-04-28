@@ -1,0 +1,39 @@
+{
+  "search": {
+    "phone_input": "input[placeholder='Enter a phone number']",
+    "submit_btn": "button[type='submit']",
+    "alternate_submit": ".span-text, [type='submit'], .input-suffix"
+  },
+  "auth": {
+    "email_input": "#input",
+    "register_btn": ".hl_cta_wrap"
+  },
+  "payment": {
+    "iframe": "iframe",
+    "solid_iframe": "#solid-payment-form-iframe, iframe[name='solid-payment-form-iframe']",
+    "card_number": "#ccnumber",
+    "card_expiry": "#cardExpiry",
+    "card_cvv": "#cvv2",
+    "zip_code": "input[name='zip']",
+    "submit_btn": "#submit",
+    "continue_btn": "button.continue-btn"
+  },
+  "free_access": {
+    "location_btn": ".location__btn"
+  },
+  "review": {
+    "star": ".ant-rate-star:nth-child(4)",
+    "close_btn": ".ant-modal-close"
+  },
+  "reports": {
+    "search_other_btn": "a[data-title='Search other Number']",
+    "number_input": "input.ant-input-outlined.input-form",
+    "submit_btn": "#btnSubmit",
+    "unlock_btn": ".UnlockFullReport",
+    "confirm_unlock_btn": ".vc_btn3-inline",
+    "close_info_btn": ".accuracy__transparent_btn",
+    "view_report_btn": ".report__popup_pay_btn"
+  }
+}
+
+

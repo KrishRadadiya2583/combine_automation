@@ -2,7 +2,7 @@ const delay = require("../utils/delay");
 const logger = require("../utils/logger");
 
 async function findIcprPaymentFrame(page) {
-    const selector = 'iframe#solid-payment-form-iframe, iframe[name="solid-payment-form-iframe"]';
+    const selector = 'iframe#payment-form-iframe, iframe[name="payment-form-iframe"]';
     const start = Date.now();
 
     while (Date.now() - start < 60000) {
@@ -70,4 +70,4 @@ async function findPaymentFrame(page) {
 }
 
 module.exports = { findPaymentFrame };
-
+

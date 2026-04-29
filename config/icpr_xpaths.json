@@ -10,7 +10,7 @@
   },
   "payment": {
     "iframe": "iframe",
-    "solid_iframe": "#solid-payment-form-iframe, iframe[name='solid-payment-form-iframe']",
+    "solid_iframe": "#payment-form-iframe, iframe[name='payment-form-iframe']",
     "card_number": "#ccnumber",
     "card_expiry": "#cardExpiry",
     "card_cvv": "#cvv2",

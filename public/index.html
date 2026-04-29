@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,78 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+
+    <!-- ── Validation Styles ───────────────────────────────────────────── -->
+    <style>
+        /* Shake animation for invalid fields */
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-8px); }
+            40%      { transform: translateX(8px); }
+            60%      { transform: translateX(-5px); }
+            80%      { transform: translateX(5px); }
+        }
+
+        /* Red border on invalid select wrapper */
+        .select-wrapper.field-error select,
+        .field-error input {
+            border: 2px solid #e53e3e !important;
+            box-shadow: 0 0 0 3px rgba(229,62,62,0.15) !important;
+            animation: shake 0.4s ease;
+        }
+
+        /* Inline field error text */
+        .field-error-msg {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #e53e3e;
+            font-weight: 500;
+        }
+
+        /* Validation banner */
+        .validation-banner {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: #fff5f5;
+            border: 1.5px solid #fc8181;
+            border-left: 4px solid #e53e3e;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            animation: shake 0.4s ease;
+        }
+        .validation-banner.show { display: flex; }
+        .validation-banner .vb-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .validation-banner .vb-body { flex: 1; }
+        .validation-banner .vb-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #c53030;
+            margin: 0 0 2px;
+        }
+        .validation-banner .vb-list {
+            margin: 0;
+            padding-left: 16px;
+            font-size: 13px;
+            color: #c53030;
+        }
+        .validation-banner .vb-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #c53030;
+            line-height: 1;
+            padding: 0 4px;
+            flex-shrink: 0;
+        }
+        .validation-banner .vb-close:hover { opacity: 0.7; }
+    </style>
 </head>
 <body>
 
@@ -120,6 +193,18 @@
         </header>
 
         <form id="configForm" class="config-form" novalidate>
+
+            <!-- ── Validation Banner ──────────────────────────────────── -->
+            <div id="validationBanner" class="validation-banner">
+                <span class="vb-icon">⛔</span>
+                <div class="vb-body">
+                    <p class="vb-title">Please fix the following before launching:</p>
+                    <ul class="vb-list" id="validationList"></ul>
+                </div>
+                <button type="button" class="vb-close" onclick="clearValidation()" title="Dismiss">✕</button>
+            </div>
+            <!-- ─────────────────────────────────────────────────────── -->
+
             <div class="form-grid">
 
                 <!-- Environment Settings -->
@@ -130,17 +215,19 @@
                     </div>
                     <div class="card-body">
                         <div class="grid-2">
-                            <div class="form-group">
+                            <div class="form-group" id="group-website_url">
                                 <label for="website_url">Target Environment</label>
-                                <div class="select-wrapper">
+                                <div class="select-wrapper" id="wrap-website_url">
                                     <select id="website_url" name="website_url" required></select>
                                 </div>
+                                <span class="field-error-msg" id="err-website_url"></span>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="group-execution_flow">
                                 <label for="execution_flow">Execution Flow</label>
-                                <div class="select-wrapper">
-                                    <select id="execution_flow" name="execution_flow"></select>
+                                <div class="select-wrapper" id="wrap-execution_flow">
+                                    <select id="execution_flow" name="execution_flow" required></select>
                                 </div>
+                                <span class="field-error-msg" id="err-execution_flow"></span>
                             </div>
                         </div>
                     </div>
@@ -311,18 +398,20 @@ const PROJECT_URLS = {
 
 const PROJECT_FLOWS = {
     icpr: [
-        { name: 'Discounted Full Access',  value: 'ENABLE_DISCOUNTED_FULL_FLOW' },
-        { name: 'Pro Access',              value: 'ENABLE_PRO_ACCESS_FLOW' },
-        { name: 'Standard Flow',           value: 'ENABLE_STANDARD_FLOW' },
-        { name: 'Paid Platform Access',    value: 'ENABLE_PAID_PLATFORM_ACCESS' },
-        { name: 'Free Platform Access',    value: 'ENABLE_FREE_PLATFORM_ACCESS' },
-        { name: 'Paid Platform (Funnel)',  value: 'ENABLE_PAID_PLATFORM' }
+        { name: '— Select a Flow —',           value: '' },
+        { name: 'Discounted Full Access',       value: 'ENABLE_DISCOUNTED_FULL_FLOW' },
+        { name: 'Pro Access',                   value: 'ENABLE_PRO_ACCESS_FLOW' },
+        { name: 'Standard Flow',                value: 'ENABLE_STANDARD_FLOW' },
+        { name: 'Paid Platform Access',         value: 'ENABLE_PAID_PLATFORM_ACCESS' },
+        { name: 'Free Platform Access',         value: 'ENABLE_FREE_PLATFORM_ACCESS' },
+        { name: 'Paid Platform (Funnel)',        value: 'ENABLE_PAID_PLATFORM' }
     ],
     tracelo: [
-        { name: 'Discounted Full Access',  value: 'ENABLE_DISCOUNTED_FULL_FLOW' },
-        { name: 'Pro Access',              value: 'ENABLE_PRO_ACCESS_FLOW' },
-        { name: 'Standard Flow',           value: 'ENABLE_STANDARD_FLOW' },
-        { name: 'Paid Platform Access',    value: 'ENABLE_PAID_PLATFORM_ACCESS' }
+        { name: '— Select a Flow —',           value: '' },
+        { name: 'Discounted Full Access',       value: 'ENABLE_DISCOUNTED_FULL_FLOW' },
+        { name: 'Pro Access',                   value: 'ENABLE_PRO_ACCESS_FLOW' },
+        { name: 'Standard Flow',                value: 'ENABLE_STANDARD_FLOW' },
+        { name: 'Paid Platform Access',         value: 'ENABLE_PAID_PLATFORM_ACCESS' }
     ]
 };
 
@@ -338,6 +427,7 @@ function selectProject(project) {
 }
 
 function goBack() {
+    clearValidation();
     document.getElementById('page-dashboard').classList.remove('page-active');
     document.getElementById('page-select').classList.add('page-active');
 }
@@ -357,22 +447,26 @@ function initDashboard(project) {
     document.getElementById('dash-title').textContent    = `${label} Control Center`;
     document.getElementById('dash-subtitle').textContent = `Configure and launch the ${label} automation engine`;
 
-    // URL dropdown
+    // URL dropdown — no blank option needed (always has a valid default)
     const urlSel = document.getElementById('website_url');
     urlSel.innerHTML = PROJECT_URLS[project].map(u =>
         `<option value="${u.value}">${u.name} — ${u.value}</option>`
     ).join('');
 
-    // Flow dropdown
+    // Flow dropdown — first option is the blank placeholder
     const flowSel = document.getElementById('execution_flow');
     flowSel.innerHTML = PROJECT_FLOWS[project].map(f =>
-        `<option value="${f.value}">${f.name}</option>`
+        `<option value="${f.value}"${f.value === '' ? ' disabled' : ''}>${f.name}</option>`
     ).join('');
+    flowSel.value = '';   // force placeholder selected
 
     // ICPR-only sections
     document.querySelectorAll('.icpr-only').forEach(el => {
         el.style.display = isIcpr ? '' : 'none';
     });
+
+    // Clear any previous validation state
+    clearValidation();
 
     // Apply .env defaults
     applyEnvDefaults(project);
@@ -381,11 +475,11 @@ function initDashboard(project) {
 function applyEnvDefaults(project) {
     const c = envConfig;
 
-    // URL — try to match saved URL or fallback to first
+    // URL
     const urlSel = document.getElementById('website_url');
     if (c.WEBSITE_URL) urlSel.value = c.WEBSITE_URL;
 
-    // Flow — detect which flow is true
+    // Flow
     const flowSel = document.getElementById('execution_flow');
     const activeFlow = ['ENABLE_DISCOUNTED_FULL_FLOW','ENABLE_PRO_ACCESS_FLOW',
         'ENABLE_STANDARD_FLOW','ENABLE_PAID_PLATFORM_ACCESS',
@@ -421,6 +515,94 @@ function applyEnvDefaults(project) {
     document.getElementById('browser_close').checked    = c.BROWSER_CLOSE_ON_COMPLETION === 'true';
 }
 
+// ─── Validation Helpers ───────────────────────────────────────────────────────
+
+/**
+ * Mark a select wrapper + show inline error text.
+ * @param {string} fieldId   - e.g. 'website_url'
+ * @param {string} message   - inline error text
+ */
+function showFieldError(fieldId, message) {
+    const wrap = document.getElementById(`wrap-${fieldId}`);
+    const err  = document.getElementById(`err-${fieldId}`);
+    if (wrap) wrap.classList.add('field-error');
+    if (err)  err.textContent = message;
+}
+
+/** Remove error state from a specific field */
+function clearFieldError(fieldId) {
+    const wrap = document.getElementById(`wrap-${fieldId}`);
+    const err  = document.getElementById(`err-${fieldId}`);
+    if (wrap) wrap.classList.remove('field-error');
+    if (err)  err.textContent = '';
+}
+
+/** Dismiss all validation UI */
+function clearValidation() {
+    clearFieldError('website_url');
+    clearFieldError('execution_flow');
+    const banner = document.getElementById('validationBanner');
+    if (banner) banner.classList.remove('show');
+}
+
+/**
+ * Run validation checks.
+ * Returns true if all required fields are valid, false otherwise.
+ */
+function validateForm() {
+    clearValidation();
+
+    const errors = [];
+
+    // 1. Target Environment — must have a non-empty value
+    const urlVal = document.getElementById('website_url').value.trim();
+    if (!urlVal) {
+        showFieldError('website_url', 'Please select a Target Environment.');
+        errors.push('Target Environment is required.');
+    }
+
+    // 2. Execution Flow — must be a non-empty value (blank placeholder = '')
+    const flowVal = document.getElementById('execution_flow').value;
+    if (!flowVal) {
+        showFieldError('execution_flow', 'Please select an Execution Flow.');
+        errors.push('Execution Flow is required.');
+    }
+
+    // If there are errors, populate and show the banner
+    if (errors.length > 0) {
+        const list   = document.getElementById('validationList');
+        const banner = document.getElementById('validationBanner');
+        list.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+        banner.classList.add('show');
+
+        // Scroll banner into view smoothly
+        banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+    }
+
+    return true;
+}
+
+// Clear individual field errors as soon as user makes a selection
+document.addEventListener('DOMContentLoaded', () => {
+    ['website_url', 'execution_flow'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('change', () => {
+                clearFieldError(id);
+                // Hide banner if no remaining errors
+                const anyError = ['website_url','execution_flow'].some(fid => {
+                    const wrap = document.getElementById(`wrap-${fid}`);
+                    return wrap && wrap.classList.contains('field-error');
+                });
+                if (!anyError) {
+                    document.getElementById('validationBanner').classList.remove('show');
+                }
+            });
+        }
+    });
+});
+
 // ─── Status Polling ───────────────────────────────────────────────────────────
 function pollStatus() {
     fetch('/api/status')
@@ -453,6 +635,12 @@ updateClock();
 // ─── Form Submit ──────────────────────────────────────────────────────────────
 document.getElementById('configForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    // ── Run validation FIRST ──────────────────────────────────────────────
+    if (!validateForm()) {
+        return;   // Stop here — do not launch
+    }
+    // ─────────────────────────────────────────────────────────────────────
 
     const btn     = document.getElementById('startBtn');
     const btnText = btn.querySelector('.btn-text');
@@ -510,19 +698,16 @@ function showStatus(msg, type) {
     setTimeout(() => { el.style.display = 'none'; }, 6000);
 }
 
-// ─── Boot: Load .env defaults, then detect default project from .env ──────────
+// ─── Boot: Load .env defaults ─────────────────────────────────────────────────
 (async function boot() {
     try {
         const res = await fetch('/api/config');
         envConfig  = await res.json();
 
-        // Show mode badge
         document.getElementById('mode-badge').textContent = 'UI Mode';
 
-        // Auto-select project from .env if set
         if (envConfig.PROJECT_TYPE) {
             currentProject = envConfig.PROJECT_TYPE;
-            // Highlight the matching card
             document.querySelectorAll('.project-card').forEach(c => c.classList.remove('selected'));
             const btn = document.getElementById(`btn-${envConfig.PROJECT_TYPE}`);
             if (btn) btn.classList.add('selected');

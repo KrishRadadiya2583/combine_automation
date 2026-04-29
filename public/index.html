@@ -1,352 +1,536 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unified Automation Panel</title>
+    <title>Automation Hub</title>
+    <meta name="description" content="Unified Automation Control Panel for ICPR and Tracelo platforms">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div class="dashboard">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <span class="logo-text">Unified Automation</span>
-                </div>
-            </div>
-            <nav class="sidebar-nav">
-                <div class="sidebar-info">
-                    <h3>Framework Summary</h3>
-                    <p class="description">
-                        A centralized automation engine for ICPR and Tracelo platforms, optimized for speed and reliability.
-                    </p>
-                    <ul class="features">
-                        <li><span>✓</span> Dual-Project Support</li>
-                        <li><span>✓</span> XPath Config Driven</li>
-                        <li><span>✓</span> Automated Payments</li>
-                        <li><span>✓</span> Intelligent Reporting</li>
-                    </ul>
-                </div>
-            </nav>
-            <div class="sidebar-footer">
-                <p>Build 1.0.0 • Unified Architecture</p>
-            </div>
-        </aside>
 
-        <main class="main-content">
-            <header class="top-bar">
-                <div class="page-title">
-                    <h1>Automation Control Center</h1>
-                    <p>Configure and launch unified execution flows</p>
-                </div>
-                <div class="top-actions">
-                    <span id="currentTime"></span>
-                </div>
-            </header>
-
-            <form id="configForm" class="config-form">
-                <div class="form-grid">
-                    <!-- Project Selection -->
-                    <section class="form-card full-width primary-card">
-                        <div class="card-header">
-                            <span class="card-icon">🚀</span>
-                            <h2>Active Project Selection</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="project_type">Select Target Project</label>
-                                <div class="select-wrapper">
-                                    <select id="project_type" name="project_type" required>
-                                        <option value="icpr">ICPR Automation</option>
-                                        <option value="tracelo">Tracelo Automation</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Website Configuration -->
-                    <section class="form-card full-width">
-                        <div class="card-header">
-                            <span class="card-icon">🌐</span>
-                            <h2>Environment Settings</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="website_url">Target URL (required)</label>
-                                <div class="select-wrapper">
-                                    <select id="website_url" name="website_url" required>
-                                        <!-- Options populated by JS based on project -->
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Puppeteer Settings -->
-                    <section class="form-card">
-                        <div class="card-header">
-                            <span class="card-icon">🖥️</span>
-                            <h2>Engine Settings</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group checkbox">
-                                <label for="puppeteer_headless">
-                                    <input type="checkbox" id="puppeteer_headless" name="puppeteer_headless" />
-                                    <span>Headless Mode</span>
-                                </label>
-                            </div>
-                            <div class="form-group checkbox">
-                                <label for="puppeteer_start_maximized">
-                                    <input type="checkbox" id="puppeteer_start_maximized" name="puppeteer_start_maximized" checked />
-                                    <span>Start Maximized</span>
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label for="puppeteer_viewport">Viewport</label>
-                                <div class="select-wrapper">
-                                    <select id="puppeteer_viewport" name="puppeteer_viewport">
-                                        <option value="null">Default (Auto)</option>
-                                        <option value='{"width":1920,"height":1080}'>1920 x 1080 (FHD)</option>
-                                        <option value='{"width":1440,"height":900}'>1440 x 900</option>
-                                        <option value='{"width":1280,"height":720}'>1280 x 720 (HD)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Execution Flow -->
-                    <section class="form-card">
-                        <div class="card-header">
-                            <span class="card-icon">⚡</span>
-                            <h2>Execution Flow</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="execution_flow">Active Flow</label>
-                                <div class="select-wrapper">
-                                    <select id="execution_flow" name="execution_flow">
-                                        <option value="ENABLE_DISCOUNTED_FULL_FLOW">Discounted Full Access</option>
-                                        <option value="ENABLE_PRO_ACCESS_FLOW">Pro Access</option>
-                                        <option value="ENABLE_STANDARD_FLOW">Standard Flow</option>
-                                        <option value="ENABLE_PAID_PLATFORM_ACCESS">Paid Platform Access</option>
-                                        <option value="ENABLE_FREE_PLATFORM_ACCESS" class="icpr-only">Free Platform Access</option>
-                                        <option value="ENABLE_PAID_PLATFORM" class="icpr-only">Paid Platform (Funnel)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group checkbox">
-                                <label for="download_pdf" class="icpr-only">
-                                    <input type="checkbox" id="download_pdf" name="download_pdf" />
-                                    <span>Download PDF Reports</span>
-                                </label>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- User Settings -->
-                    <section class="form-card">
-                        <div class="card-header">
-                            <span class="card-icon">👥</span>
-                            <h2>User Settings</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="user_count">Registration Count</label>
-                                <input type="number" id="user_count" name="user_count" value="1" min="1" />
-                            </div>
-                            <div class="form-group">
-                                <label for="max_retries">Max Retries</label>
-                                <input type="number" id="max_retries" name="max_retries" value="3" min="0" />
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Payment Details -->
-                    <section class="form-card">
-                        <div class="card-header">
-                            <span class="card-icon">💳</span>
-                            <h2>Payment Configuration</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="card_number">Card Number</label>
-                                <input type="text" id="card_number" name="card_number" placeholder="0000 0000 0000 0000" maxlength="16" />
-                            </div>
-                            <div class="grid-2">
-                                <div class="form-group">
-                                    <label for="card_expiry">Expiry (MM/YY)</label>
-                                    <input type="text" id="card_expiry" name="card_expiry" placeholder="MM/YY" maxlength="5" />
-                                </div>
-                                <div class="form-group">
-                                    <label for="card_cvv">CVV</label>
-                                    <input type="text" id="card_cvv" name="card_cvv" placeholder="123" maxlength="4" />
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Recording Settings -->
-                    <section class="form-card">
-                        <div class="card-header">
-                            <span class="card-icon">🎥</span>
-                            <h2>Evidence & Output</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group checkbox">
-                                <label for="enable_recording">
-                                    <input type="checkbox" id="enable_recording" name="enable_recording" />
-                                    <span>Screen Recording</span>
-                                </label>
-                            </div>
-                            <div class="form-group checkbox icpr-only">
-                                <label for="html_creation">
-                                    <input type="checkbox" id="html_creation" name="html_creation" />
-                                    <span>Generate Credential Pages</span>
-                                </label>
-                            </div>
-                            <div class="form-group checkbox">
-                                <label for="browser_close">
-                                    <input type="checkbox" id="browser_close" name="browser_close" />
-                                    <span>Close Browser on Completion</span>
-                                </label>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div class="form-footer">
-                    <div id="statusMessage" class="status-message"></div>
-                    <button type="submit" class="start-button">
-                        <span class="btn-text">Execute Automation</span>
-                        <span class="btn-icon">⚡</span>
-                    </button>
-                </div>
-            </form>
-        </main>
+<!-- ══════════════════════ STEP 1: PROJECT SELECTION ══════════════════════ -->
+<div id="page-select" class="page page-active">
+    <div class="select-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+    <div class="select-container">
+        <div class="brand">
+            <div class="brand-icon">⚡</div>
+            <span class="brand-name">Automation Hub</span>
+            <span id="mode-badge" class="mode-badge">UI Mode</span>
+        </div>
+        <h1 class="select-title">Select Your Automation</h1>
+        <p class="select-subtitle">Choose a platform to configure and launch the automation engine</p>
 
-    <script>
-        const PROJECT_URLS = {
-            icpr: [
-                { name: 'Dev Environment', value: 'https://dev.infochecker.com/' },
-                { name: 'Stage Environment', value: 'https://stage.infochecker.com/' },
-                { name: 'UAT Environment', value: 'https://uat.infochecker.com/' }
-            ],
-            tracelo: [
-                { name: 'Production', value: 'https://tracelo.com/' },
-                { name: 'Stage', value: 'https://stage.tracelo.com/' }
-            ]
-        };
+        <div class="project-cards">
+            <button id="btn-icpr" class="project-card" onclick="selectProject('icpr')">
+                <div class="project-card-glow icpr-glow"></div>
+                <div class="project-card-inner">
+                    <div class="project-logo icpr-logo">IC</div>
+                    <div class="project-info">
+                        <h2>ICPR Automation</h2>
+                        <p>InfoChecker registration, payment &amp; reporting flows</p>
+                        <ul class="project-tags">
+                            <li>Registration</li>
+                            <li>Payment</li>
+                            <li>Reports</li>
+                            <li>PDF</li>
+                        </ul>
+                    </div>
+                    <div class="project-arrow">→</div>
+                </div>
+            </button>
 
-        document.addEventListener('DOMContentLoaded', async function () {
-            const projectSelect = document.getElementById('project_type');
-            const urlSelect = document.getElementById('website_url');
-            const configForm = document.getElementById('configForm');
-            const statusMessage = document.getElementById('statusMessage');
-            const startButton = configForm.querySelector('.start-button');
-            const btnText = startButton.querySelector('.btn-text');
-            const btnIcon = startButton.querySelector('.btn-icon');
+            <button id="btn-tracelo" class="project-card" onclick="selectProject('tracelo')">
+                <div class="project-card-glow tracelo-glow"></div>
+                <div class="project-card-inner">
+                    <div class="project-logo tracelo-logo">TR</div>
+                    <div class="project-info">
+                        <h2>Tracelo Automation</h2>
+                        <p>Tracelo platform registration &amp; subscription flows</p>
+                        <ul class="project-tags">
+                            <li>Registration</li>
+                            <li>Subscription</li>
+                            <li>Payment</li>
+                        </ul>
+                    </div>
+                    <div class="project-arrow">→</div>
+                </div>
+            </button>
+        </div>
 
-            // Handle project change
-            projectSelect.addEventListener('change', function() {
-                updateProjectUI(this.value);
-            });
+        <p class="select-footer">Automation Hub • Build 1.0.0</p>
+    </div>
+</div>
 
-            function updateProjectUI(project) {
-                // Update URL options
-                urlSelect.innerHTML = PROJECT_URLS[project].map(url => 
-                    `<option value="${url.value}">${url.name} (${url.value})</option>`
-                ).join('');
+<!-- ══════════════════════ STEP 2: DASHBOARD ══════════════════════════════ -->
+<div id="page-dashboard" class="page">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="back-btn" onclick="goBack()">← Back</button>
+            <div class="sidebar-brand">
+                <div id="sb-logo" class="sb-logo icpr-logo">IC</div>
+                <div>
+                    <div id="sb-title" class="sb-title">ICPR Automation</div>
+                    <div class="sb-sub">Automation Hub</div>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Quick Info</div>
+            <ul class="features">
+                <li><span class="feat-dot"></span>Dual-Project Support</li>
+                <li><span class="feat-dot"></span>XPath Config Driven</li>
+                <li><span class="feat-dot"></span>Automated Payments</li>
+                <li><span class="feat-dot"></span>Intelligent Reporting</li>
+                <li><span class="feat-dot"></span>Screen Recording</li>
+            </ul>
+            <div class="nav-section-label" style="margin-top:2rem">Status</div>
+            <div class="status-panel">
+                <div class="status-row">
+                    <span>Server</span>
+                    <span class="status-dot online"></span>
+                </div>
+                <div class="status-row">
+                    <span>Automation</span>
+                    <span id="automation-status" class="status-dot idle"></span>
+                </div>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <span id="sb-clock"></span> • Build 1.0.0
+        </div>
+    </aside>
 
-                // Show/hide project-specific options
-                const icprOnly = document.querySelectorAll('.icpr-only');
-                icprOnly.forEach(el => {
-                    el.style.display = (project === 'icpr') ? '' : 'none';
-                });
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="page-title">
+                <h1 id="dash-title">ICPR Control Center</h1>
+                <p id="dash-subtitle">Configure and launch the ICPR automation engine</p>
+            </div>
+            <div class="top-actions">
+                <span id="currentTime" class="time-display"></span>
+            </div>
+        </header>
+
+        <form id="configForm" class="config-form" novalidate>
+            <div class="form-grid">
+
+                <!-- Environment Settings -->
+                <section class="form-card full-width primary-card">
+                    <div class="card-header">
+                        <span class="card-icon">🌐</span>
+                        <h2>Environment Settings</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="website_url">Target Environment</label>
+                                <div class="select-wrapper">
+                                    <select id="website_url" name="website_url" required></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="execution_flow">Execution Flow</label>
+                                <div class="select-wrapper">
+                                    <select id="execution_flow" name="execution_flow"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Engine Settings -->
+                <section class="form-card">
+                    <div class="card-header">
+                        <span class="card-icon">🖥️</span>
+                        <h2>Engine Settings</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group checkbox">
+                            <label for="puppeteer_headless">
+                                <input type="checkbox" id="puppeteer_headless" name="puppeteer_headless">
+                                <span>Headless Mode</span>
+                            </label>
+                        </div>
+                        <div class="form-group checkbox">
+                            <label for="puppeteer_start_maximized">
+                                <input type="checkbox" id="puppeteer_start_maximized" name="puppeteer_start_maximized" checked>
+                                <span>Start Maximized</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="puppeteer_viewport">Viewport</label>
+                            <div class="select-wrapper">
+                                <select id="puppeteer_viewport" name="puppeteer_viewport">
+                                    <option value="null">Default (Auto)</option>
+                                    <option value='{"width":1920,"height":1080}'>1920 × 1080 (FHD)</option>
+                                    <option value='{"width":1440,"height":900}'>1440 × 900</option>
+                                    <option value='{"width":1280,"height":720}'>1280 × 720 (HD)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- User Settings -->
+                <section class="form-card">
+                    <div class="card-header">
+                        <span class="card-icon">👥</span>
+                        <h2>User Settings</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="user_count">Registration Count</label>
+                            <input type="number" id="user_count" name="user_count" value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="max_retries">Max Retries</label>
+                            <input type="number" id="max_retries" name="max_retries" value="3" min="0">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Payment -->
+                <section class="form-card">
+                    <div class="card-header">
+                        <span class="card-icon">💳</span>
+                        <h2>Payment Configuration</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="card_number">Card Number</label>
+                            <input type="text" id="card_number" name="card_number" placeholder="0000000000000000" maxlength="16">
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="card_expiry">Expiry (MM/YY)</label>
+                                <input type="text" id="card_expiry" name="card_expiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="card_cvv">CVV</label>
+                                <input type="text" id="card_cvv" name="card_cvv" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ICPR-only: Reports -->
+                <section class="form-card icpr-only">
+                    <div class="card-header">
+                        <span class="card-icon">📊</span>
+                        <h2>Reports &amp; PDF</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group checkbox">
+                            <label for="enable_report">
+                                <input type="checkbox" id="enable_report" name="enable_report">
+                                <span>Generate Reports</span>
+                            </label>
+                        </div>
+                        <div class="form-group" id="report-count-wrap">
+                            <label for="report_count">Report Count</label>
+                            <input type="number" id="report_count" name="report_count" value="1" min="1">
+                        </div>
+                        <div class="form-group checkbox">
+                            <label for="unlock_report">
+                                <input type="checkbox" id="unlock_report" name="unlock_report">
+                                <span>Auto-Unlock Latest Report</span>
+                            </label>
+                        </div>
+                        <div class="form-group checkbox">
+                            <label for="download_pdf">
+                                <input type="checkbox" id="download_pdf" name="download_pdf">
+                                <span>Download PDF Reports</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Evidence & Output -->
+                <section class="form-card">
+                    <div class="card-header">
+                        <span class="card-icon">🎥</span>
+                        <h2>Evidence &amp; Output</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group checkbox">
+                            <label for="enable_recording">
+                                <input type="checkbox" id="enable_recording" name="enable_recording">
+                                <span>Screen Recording</span>
+                            </label>
+                        </div>
+                        <div class="form-group checkbox icpr-only">
+                            <label for="html_creation">
+                                <input type="checkbox" id="html_creation" name="html_creation">
+                                <span>Generate Credential Pages</span>
+                            </label>
+                        </div>
+                        <div class="form-group checkbox">
+                            <label for="browser_close">
+                                <input type="checkbox" id="browser_close" name="browser_close">
+                                <span>Close Browser on Completion</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+
+            </div><!-- /form-grid -->
+
+            <div class="form-footer">
+                <div id="statusMessage" class="status-message"></div>
+                <button type="submit" id="startBtn" class="start-button">
+                    <span class="btn-text">Execute Automation</span>
+                    <span class="btn-icon">⚡</span>
+                </button>
+            </div>
+        </form>
+    </main>
+</div>
+
+<script>
+// ─── Project URL + Flow Maps ──────────────────────────────────────────────────
+const PROJECT_URLS = {
+    icpr: [
+        { name: 'Dev Environment',   value: 'https://dev.infochecker.com/' },
+        { name: 'Stage Environment', value: 'https://stage.infochecker.com/' },
+        { name: 'UAT Environment',   value: 'https://uat.infochecker.com/' }
+    ],
+    tracelo: [
+        { name: 'Dev Environment',   value: 'https://dev.tracelo.com/' },
+        { name: 'Stage Environment', value: 'https://stage.tracelo.com/' },
+        { name: 'UAT Environment',   value: 'https://uat.tracelo.com/' }
+    ]
+};
+
+const PROJECT_FLOWS = {
+    icpr: [
+        { name: 'Discounted Full Access',  value: 'ENABLE_DISCOUNTED_FULL_FLOW' },
+        { name: 'Pro Access',              value: 'ENABLE_PRO_ACCESS_FLOW' },
+        { name: 'Standard Flow',           value: 'ENABLE_STANDARD_FLOW' },
+        { name: 'Paid Platform Access',    value: 'ENABLE_PAID_PLATFORM_ACCESS' },
+        { name: 'Free Platform Access',    value: 'ENABLE_FREE_PLATFORM_ACCESS' },
+        { name: 'Paid Platform (Funnel)',  value: 'ENABLE_PAID_PLATFORM' }
+    ],
+    tracelo: [
+        { name: 'Discounted Full Access',  value: 'ENABLE_DISCOUNTED_FULL_FLOW' },
+        { name: 'Pro Access',              value: 'ENABLE_PRO_ACCESS_FLOW' },
+        { name: 'Standard Flow',           value: 'ENABLE_STANDARD_FLOW' },
+        { name: 'Paid Platform Access',    value: 'ENABLE_PAID_PLATFORM_ACCESS' }
+    ]
+};
+
+let currentProject = 'icpr';
+let envConfig = {};
+
+// ─── Page Navigation ─────────────────────────────────────────────────────────
+function selectProject(project) {
+    currentProject = project;
+    document.getElementById('page-select').classList.remove('page-active');
+    document.getElementById('page-dashboard').classList.add('page-active');
+    initDashboard(project);
+}
+
+function goBack() {
+    document.getElementById('page-dashboard').classList.remove('page-active');
+    document.getElementById('page-select').classList.add('page-active');
+}
+
+// ─── Dashboard Init ───────────────────────────────────────────────────────────
+function initDashboard(project) {
+    const isIcpr = project === 'icpr';
+    const label  = isIcpr ? 'ICPR' : 'Tracelo';
+
+    // Sidebar
+    const sbLogo  = document.getElementById('sb-logo');
+    sbLogo.textContent = isIcpr ? 'IC' : 'TR';
+    sbLogo.className   = `sb-logo ${project}-logo`;
+    document.getElementById('sb-title').textContent = `${label} Automation`;
+
+    // Header
+    document.getElementById('dash-title').textContent    = `${label} Control Center`;
+    document.getElementById('dash-subtitle').textContent = `Configure and launch the ${label} automation engine`;
+
+    // URL dropdown
+    const urlSel = document.getElementById('website_url');
+    urlSel.innerHTML = PROJECT_URLS[project].map(u =>
+        `<option value="${u.value}">${u.name} — ${u.value}</option>`
+    ).join('');
+
+    // Flow dropdown
+    const flowSel = document.getElementById('execution_flow');
+    flowSel.innerHTML = PROJECT_FLOWS[project].map(f =>
+        `<option value="${f.value}">${f.name}</option>`
+    ).join('');
+
+    // ICPR-only sections
+    document.querySelectorAll('.icpr-only').forEach(el => {
+        el.style.display = isIcpr ? '' : 'none';
+    });
+
+    // Apply .env defaults
+    applyEnvDefaults(project);
+}
+
+function applyEnvDefaults(project) {
+    const c = envConfig;
+
+    // URL — try to match saved URL or fallback to first
+    const urlSel = document.getElementById('website_url');
+    if (c.WEBSITE_URL) urlSel.value = c.WEBSITE_URL;
+
+    // Flow — detect which flow is true
+    const flowSel = document.getElementById('execution_flow');
+    const activeFlow = ['ENABLE_DISCOUNTED_FULL_FLOW','ENABLE_PRO_ACCESS_FLOW',
+        'ENABLE_STANDARD_FLOW','ENABLE_PAID_PLATFORM_ACCESS',
+        'ENABLE_FREE_PLATFORM_ACCESS','ENABLE_PAID_PLATFORM']
+        .find(f => c[f] === 'true');
+    if (activeFlow) flowSel.value = activeFlow;
+
+    // Engine
+    document.getElementById('puppeteer_headless').checked        = c.PUPPETEER_HEADLESS === 'true';
+    document.getElementById('puppeteer_start_maximized').checked = c.PUPPETEER_START_MAXIMIZED !== 'false';
+    if (c.PUPPETEER_DEFAULT_VIEWPORT && c.PUPPETEER_DEFAULT_VIEWPORT !== 'null') {
+        document.getElementById('puppeteer_viewport').value = c.PUPPETEER_DEFAULT_VIEWPORT;
+    }
+
+    // User
+    document.getElementById('user_count').value  = c.USER_REGISTRATION_COUNT || '1';
+    document.getElementById('max_retries').value  = c.MAX_RETRIES || '3';
+
+    // Payment
+    document.getElementById('card_number').value = c.CARD_NUMBER || '';
+    document.getElementById('card_expiry').value  = c.CARD_EXPIRY || '';
+    document.getElementById('card_cvv').value     = c.CARD_CVV    || '';
+
+    // ICPR extras
+    document.getElementById('enable_report').checked   = c.ENABLE_CREATE_REPORT === 'true';
+    document.getElementById('report_count').value       = c.REPORT_COUNT || '1';
+    document.getElementById('unlock_report').checked    = c.UNLOCK_REPORT === 'true';
+    document.getElementById('download_pdf').checked     = c.DOWNLOAD_PDF === 'true';
+    document.getElementById('html_creation').checked    = c.HTML_PAGE_CREATION_FOR_USER_DETAILS === 'true';
+
+    // Output
+    document.getElementById('enable_recording').checked = c.ENABLE_RECORDING === 'true';
+    document.getElementById('browser_close').checked    = c.BROWSER_CLOSE_ON_COMPLETION === 'true';
+}
+
+// ─── Status Polling ───────────────────────────────────────────────────────────
+function pollStatus() {
+    fetch('/api/status')
+        .then(r => r.json())
+        .then(d => {
+            const dot = document.getElementById('automation-status');
+            if (dot) {
+                dot.className = `status-dot ${d.running ? 'running' : 'idle'}`;
+                dot.title     = d.running ? 'Running' : 'Idle';
             }
+        })
+        .catch(() => {});
+}
+setInterval(pollStatus, 3000);
 
-            // Update time
-            function updateTime() {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short' });
-                document.getElementById('currentTime').innerHTML = 
-                    `<span style="color: var(--text-muted)">${dateStr}</span> <span style="font-weight: 600; margin-left: 8px">${timeStr}</span>`;
-            }
-            setInterval(updateTime, 1000);
-            updateTime();
+// ─── Clock ────────────────────────────────────────────────────────────────────
+function updateClock() {
+    const now     = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const dateStr = now.toLocaleDateString([], { day: 'numeric', month: 'short' });
+    const html    = `<span class="date-part">${dateStr}</span> <span class="time-part">${timeStr}</span>`;
+    const ct  = document.getElementById('currentTime');
+    const sbc = document.getElementById('sb-clock');
+    if (ct)  ct.innerHTML  = html;
+    if (sbc) sbc.textContent = timeStr;
+}
+setInterval(updateClock, 1000);
+updateClock();
 
-            // Load Configuration
-            try {
-                const response = await fetch('/api/config');
-                const config = await response.json();
-                
-                if (config.PROJECT_TYPE) projectSelect.value = config.PROJECT_TYPE;
-                updateProjectUI(projectSelect.value);
-                
-                // Map other fields
-                if (config.WEBSITE_URL) urlSelect.value = config.WEBSITE_URL;
-                document.getElementById('puppeteer_headless').checked = config.PUPPETEER_HEADLESS === 'true';
-                document.getElementById('user_count').value = config.USER_REGISTRATION_COUNT || 1;
-                document.getElementById('card_number').value = config.CARD_NUMBER || '';
-                document.getElementById('card_expiry').value = config.CARD_EXPIRY || '';
-                document.getElementById('card_cvv').value = config.CARD_CVV || '';
-            } catch (err) {
-                updateProjectUI('icpr');
-            }
+// ─── Form Submit ──────────────────────────────────────────────────────────────
+document.getElementById('configForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-            // Form Submit
-            configForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
-                
-                const config = {
-                    PROJECT_TYPE: projectSelect.value,
-                    WEBSITE_URL: urlSelect.value,
-                    PUPPETEER_HEADLESS: document.getElementById('puppeteer_headless').checked ? 'true' : 'false',
-                    USER_REGISTRATION_COUNT: document.getElementById('user_count').value,
-                    CARD_NUMBER: document.getElementById('card_number').value,
-                    CARD_EXPIRY: document.getElementById('card_expiry').value,
-                    CARD_CVV: document.getElementById('card_cvv').value,
-                    [document.getElementById('execution_flow').value]: 'true'
-                };
+    const btn     = document.getElementById('startBtn');
+    const btnText = btn.querySelector('.btn-text');
+    btn.disabled  = true;
+    btnText.textContent = 'Launching…';
 
-                startButton.disabled = true;
-                btnText.textContent = 'Launching...';
+    const config = {
+        PROJECT_TYPE:                        currentProject,
+        WEBSITE_URL:                         document.getElementById('website_url').value,
+        activeFlow:                          document.getElementById('execution_flow').value,
+        PUPPETEER_HEADLESS:                  document.getElementById('puppeteer_headless').checked  ? 'true' : 'false',
+        PUPPETEER_START_MAXIMIZED:           document.getElementById('puppeteer_start_maximized').checked ? 'true' : 'false',
+        PUPPETEER_DEFAULT_VIEWPORT:          document.getElementById('puppeteer_viewport').value,
+        USER_REGISTRATION_COUNT:             document.getElementById('user_count').value,
+        MAX_RETRIES:                         document.getElementById('max_retries').value,
+        CARD_NUMBER:                         document.getElementById('card_number').value,
+        CARD_EXPIRY:                         document.getElementById('card_expiry').value,
+        CARD_CVV:                            document.getElementById('card_cvv').value,
+        ENABLE_CREATE_REPORT:                document.getElementById('enable_report').checked   ? 'true' : 'false',
+        REPORT_COUNT:                        document.getElementById('report_count').value,
+        UNLOCK_REPORT:                       document.getElementById('unlock_report').checked    ? 'true' : 'false',
+        DOWNLOAD_PDF:                        document.getElementById('download_pdf').checked     ? 'true' : 'false',
+        HTML_PAGE_CREATION_FOR_USER_DETAILS: document.getElementById('html_creation').checked   ? 'true' : 'false',
+        ENABLE_RECORDING:                    document.getElementById('enable_recording').checked ? 'true' : 'false',
+        BROWSER_CLOSE_ON_COMPLETION:         document.getElementById('browser_close').checked    ? 'true' : 'false',
+    };
 
-                try {
-                    const response = await fetch('/api/config-and-run', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(config)
-                    });
-
-                    if (response.ok) {
-                        showStatus('✓ Automation started!', 'success');
-                    } else {
-                        showStatus('✗ Failed to start', 'error');
-                    }
-                } catch (error) {
-                    showStatus('✗ Connection error', 'error');
-                } finally {
-                    startButton.disabled = false;
-                    btnText.textContent = 'Execute Automation';
-                }
-            });
-
-            function showStatus(message, type) {
-                statusMessage.textContent = message;
-                statusMessage.className = `status-message ${type}`;
-                statusMessage.style.display = 'block';
-                setTimeout(() => statusMessage.style.display = 'none', 5000);
-            }
+    try {
+        const res = await fetch('/api/config-and-run', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(config)
         });
-    </script>
+
+        if (res.ok) {
+            showStatus('✓ Automation launched successfully!', 'success');
+        } else if (res.status === 409) {
+            showStatus('⚠ Automation is already running.', 'warn');
+        } else {
+            showStatus('✗ Failed to start automation.', 'error');
+        }
+    } catch (err) {
+        showStatus('✗ Connection error — is the server running?', 'error');
+    } finally {
+        btn.disabled = false;
+        btnText.textContent = 'Execute Automation';
+    }
+});
+
+function showStatus(msg, type) {
+    const el = document.getElementById('statusMessage');
+    el.textContent  = msg;
+    el.className    = `status-message ${type}`;
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 6000);
+}
+
+// ─── Boot: Load .env defaults, then detect default project from .env ──────────
+(async function boot() {
+    try {
+        const res = await fetch('/api/config');
+        envConfig  = await res.json();
+
+        // Show mode badge
+        document.getElementById('mode-badge').textContent = 'UI Mode';
+
+        // Auto-select project from .env if set
+        if (envConfig.PROJECT_TYPE) {
+            currentProject = envConfig.PROJECT_TYPE;
+            // Highlight the matching card
+            document.querySelectorAll('.project-card').forEach(c => c.classList.remove('selected'));
+            const btn = document.getElementById(`btn-${envConfig.PROJECT_TYPE}`);
+            if (btn) btn.classList.add('selected');
+        }
+    } catch (e) {
+        // Server not reachable — silent
+    }
+})();
+</script>
 </body>
-</html>
+</html>

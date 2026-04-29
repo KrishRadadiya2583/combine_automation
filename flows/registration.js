@@ -19,7 +19,7 @@ async function registerusers(page) {
 
     // mobil number search & submit
     const mobile = await searchmobileno(page);
-    logger.data("Mobile typed", mobile)
+    logger.data("Mobile typed successfully", mobile)
 
     await delay(process.env.COMMON_DELAY_ONCLICKS)
 
@@ -27,16 +27,19 @@ async function registerusers(page) {
     const email = await useremailtype(page);
     await delay(process.env.COMMON_DELAY_ONCLICKS)
 
+    logger.data("Email typed successfully", email);
+
     // project specific helper calls
     if (projectType === 'icpr' && process.env.ENABLE_FREE_PLATFORM_ACCESS === "true") {
+        logger.process("Granting free platform access... of icpr project");
         await delay(4000)
         await free_platform_access(page);
-        logger.success("Free platform access successful");
+        logger.success("Free platform access successful for icpr project");
         await delay(4000)
     }
 
     logger.process("Waiting for payment page...");
-    logger.success("User register successful");
+   
 
     if (projectType === 'icpr' && process.env.ENABLE_PAID_PLATFORM === "true") {
         await delay(10000)
@@ -115,8 +118,11 @@ if(projectType === 'icpr' ){
         }
 
     }
+   
 }
+  logger.success("User register successful");
     appendUser(email);
+    
     return page;
 }
 

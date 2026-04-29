@@ -104,6 +104,7 @@ async function reportEmailFetcher(page, email) {
                                         block: "center",
                                     });
                                 }, link);
+                                logger.info("Scrolled 'View Now' into view");
 
                                 await delay(2000);
 
@@ -115,11 +116,16 @@ async function reportEmailFetcher(page, email) {
                                 await yopmailPage.close();
 
                                 const reportPage = await browser.newPage();
+
+                                logger.process("new page found for report");
                                 
                                 // Now set headers via cloudAccess
                                 await cloudAccess(reportPage);
+                                logger.success("Cloud access granted for report page");
                                 
                                 await reportPage.goto(targetUrl, { waitUntil: "networkidle0", timeout: 60000 });
+
+                                logger.success("Report page loaded");
 
                                 await delay(process.env.COMMON_DELAY_ONCLICKS);
 
@@ -132,14 +138,17 @@ async function reportEmailFetcher(page, email) {
                                     const el = document.querySelector(".location__button_wrap.blurred .npd__unlock_icon");
                                     if (el) el.scrollIntoView({ block: "center" });
                                 });
+                                logger.info("Scrolled to location button");
                                 await delay(process.env.COMMON_DELAY_ONCLICKS)
                                 await reportPage.click(".location__button_wrap.blurred .npd__unlock_icon");
                                 await delay(process.env.COMMON_DELAY_ONCLICKS);
+                                logger.success("Clicked location button, proceeding to payment");
 
                                 await delay(2000)
                                 await delay(process.env.COMMON_DELAY_ONCLICKS);
                                 await handlePayment(reportPage);
                                 await delay(process.env.COMMON_DELAY_ONCLICKS);
+                                logger.success("Payment handled, report should be accessible now");
 
                                 return reportPage; // Return the new page
                             }

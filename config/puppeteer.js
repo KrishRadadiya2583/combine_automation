@@ -8,6 +8,8 @@ puppeteer.use(StealthPlugin());
 const logger = require("../utils/logger");
 
 async function launchBrowser() {
+
+    logger.header('select '+( process.env.PROJECT_TYPE)+' project');
     const isHeadless = process.env.PUPPETEER_HEADLESS === "true";
     const startMaximized = process.env.PUPPETEER_START_MAXIMIZED === 'true';
 

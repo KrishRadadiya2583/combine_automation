@@ -28,10 +28,12 @@ async function generateReportsAndUnlock(page) {
 
 logger.process("Waiting for input...");
 
-await page.waitForSelector(reportsXpath.number_input, { visible: true });
+await page.waitForSelector(reportsXpath.number_input, { visible: true , timeout: 10000 });
 
 // pick correct input (important if multiple exist)
 const input = (await page.$$(reportsXpath.number_input))[2]; // change index if needed
+
+await delay(process.env.COMMON_DELAY_ONCLICKS)
 
 await input.click(); // focus
 await input.evaluate(el => el.value = ''); // clear
@@ -39,10 +41,13 @@ await input.evaluate(el => el.value = ''); // clear
 const mobile = randomMobile();
 logger.process("Typing: " + mobile);
 
+await delay(process.env.COMMON_DELAY_ONCLICKS)
 // type directly into element (not keyboard)
-await input.type(mobile, { delay: 50 });
+await input.type(mobile, { delay: 10 });
 
 logger.success("Number entered");
+
+await delay(process.env.COMMON_DELAY_ONCLICKS);
 
 // submit
 await page.waitForSelector(reportsXpath.submit_btn, { visible: true });

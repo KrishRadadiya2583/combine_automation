@@ -100,7 +100,14 @@ async function startInteractiveCli() {
             type: 'input',
             name: 'CARD_NUMBER',
             message: 'Enter 16-digit Card Number:',
-            default: process.env.CARD_NUMBER,
+            default: (answers) => {
+                if (answers.activeFlow === 'ENABLE_PAID_PLATFORM_ACCESS') {
+                    return process.env.PAID_VISA_CARD_NUMBER;
+                }
+                else {
+                    return process.env.CARD_NUMBER;
+                }
+            },
             validate: val => val.length === 16 || 'Must be 16 digits',
             when: (ans) => ans.nextStep === 'continue'
         },

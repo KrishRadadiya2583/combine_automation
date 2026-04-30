@@ -19,12 +19,15 @@ async function fillBillingInfo(page, logger) {
     const city      = randomFromArray(['Mumbai', 'Delhi', 'Ahmedabad']);
     const zipcode   = randomNumber(100000, 999999).toString();
 
+      logger.info("Filling billing information with random data: "+ JSON.stringify({firstName, lastName, address, city, zipcode}))
     // FIRST NAME
     await page.waitForSelector(xpaths.billing.first_name, { visible: true });
+  
     await page.type(xpaths.billing.first_name, firstName, { delay: 50 });
 
     // LAST NAME
     await page.waitForSelector(xpaths.billing.last_name, { visible: true });
+
     await page.type(xpaths.billing.last_name, lastName, { delay: 50 });
 
     // ADDRESS
@@ -46,7 +49,7 @@ async function fillBillingInfo(page, logger) {
     await delay(process.env.COMMON_DELAY_ONCLICKS);
 
 
-    logger?.info("Billing form filled with random data");
+    logger?.info("Billing form filled SUCCESSFULLY with random data");
 }
 
-module.exports = { fillBillingInfo };
+module.exports = { fillBillingInfo };

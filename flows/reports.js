@@ -29,21 +29,23 @@ async function generateReportsAndUnlock(page) {
             await delay(process.env.COMMON_DELAY_ONCLICKS);
             await page.waitForSelector(reportsXpath.number_input, { visible: true });
             await delay(process.env.COMMON_DELAY_ONCLICKS);
+            logger.process("entering number for report generation");
 
             await page.type(reportsXpath.number_input, randomMobile(), { delay: 50 });
 
-            logger.process("number enter success");
+            logger.process("number entered successfully");
 
             // click on submit
             await delay(process.env.COMMON_DELAY_ONCLICKS);
             await page.waitForSelector(reportsXpath.submit_btn, { visible: true });
+            logger.process("clicking on submit button for report generation");
             await delay(process.env.COMMON_DELAY_ONCLICKS);
             await page.click(reportsXpath.submit_btn);
+            logger.process("submit button click initiated");
 
-            logger.process("submit button click success");
 
             await page.waitForSelector(reportsXpath.search_other_btn, { visible: true, timeout: 60000 });
-            logger.success("report " + i + " generate  successfull");
+            logger.success("report " + i + " generate  successfull for user ");
             await delay(500);
         }
     }
@@ -52,12 +54,15 @@ async function generateReportsAndUnlock(page) {
         // unlock latest report 
         await delay(process.env.COMMON_DELAY_ONCLICKS);
         await page.waitForSelector(reportsXpath.unlock_btn, { visible: true });
+            logger.process("clicking on unlock button for latest report");
         await delay(process.env.COMMON_DELAY_ONCLICKS);
         await page.click(reportsXpath.unlock_btn);
+        logger.process("unlock button clicked for latest report");
 
         // again click on unlock report
         await page.waitForSelector(reportsXpath.confirm_unlock_btn, { visible: true });
         await delay(process.env.COMMON_DELAY_ONCLICKS);
+        logger.process("clicking on confirm unlock button for latest report");
         await page.click(reportsXpath.confirm_unlock_btn);
 
         // Play sound for unlock
@@ -70,6 +75,7 @@ async function generateReportsAndUnlock(page) {
 
         // close info page
         await page.waitForSelector(reportsXpath.close_info_btn, { visible: true });
+        logger.process("closing info page");
         await delay(process.env.COMMON_DELAY_ONCLICKS);
         await page.click(reportsXpath.close_info_btn);
 

@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const logger = require("../utils/logger");
 
 function appendUser(email) {
     const now = new Date();
@@ -33,6 +33,8 @@ function appendUser(email) {
         const fileName = `user-${formattedDate}.txt`;
 
         fs.appendFileSync(fileName, `${email}\n`);
+
+        logger.info(`User email ${email} appended to file ${fileName}`);
     }
 }
 module.exports = { appendUser };

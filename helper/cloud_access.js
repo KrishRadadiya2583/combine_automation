@@ -30,7 +30,7 @@ async function cloudAccess(page) {
         req.continue({ headers });
     });
 
-    logger.process("Cloudflare Access headers applied");
+    logger.process("Cloudflare Access headers applied in request interception");
 }
 
 module.exports = { cloudAccess };

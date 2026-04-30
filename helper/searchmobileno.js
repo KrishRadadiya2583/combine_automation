@@ -8,7 +8,9 @@ async function searchmobileno(page) {
     const mobile = randomMobile();
     logger.data("Mobile", mobile);
 
+    logger.process("Waiting for phone input field to be visible");
     await page.waitForSelector(xpaths.search.phone_input, { visible: true });
+    logger.process("Typing mobile number into search field");
     await page.type(xpaths.search.phone_input, mobile, { delay: 50 });
 
     // ===== STEP 2: SEARCH =====
@@ -31,4 +33,4 @@ async function searchmobileno(page) {
     return mobile;
 }
 
-module.exports = { searchmobileno };
+module.exports = { searchmobileno };

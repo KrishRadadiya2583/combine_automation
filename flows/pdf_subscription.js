@@ -17,11 +17,14 @@ async function downloadPDF(page) {
     await delay(process.env.COMMON_DELAY_ONCLICKS);
     await page.click('#site_Privacy');
 
+    logger.success("Clicked on Privacy link checkbox");
+
     await delay(process.env.COMMON_DELAY_ONCLICKS);
 
     await page.waitForSelector('button[type="submit"]', { visible: true, timeout: 30000 });
     await delay(process.env.CLICK_DELAY_MS);
     await page.click('button[type="submit"]');
+    logger.success(" PDF subscription purchase successfully completed");
 
 
   } catch (err) {

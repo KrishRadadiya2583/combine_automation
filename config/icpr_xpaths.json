@@ -27,7 +27,7 @@
   },
   "reports": {
     "search_other_btn": "a[data-title='Search other Number']",
-    "number_input": "input.ant-input-outlined.input-form",
+    "number_input": "input[inputmode='tel']",
     "submit_btn": "#btnSubmit",
     "unlock_btn": ".UnlockFullReport",
     "confirm_unlock_btn": ".vc_btn3-inline",

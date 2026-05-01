@@ -152,7 +152,9 @@ async function handleTraceloPayment(page) {
         input.dispatchEvent(new Event('input', { bubbles: true }));
         input.dispatchEvent(new Event('change', { bubbles: true }));
     }, xpaths.payment.card_cvv, cardCvv);
+    await page.keyboard.press("Tab");
     logger.process("card cvv set.");
+
 
     await delay(1000);
     logger.success("Card details filled");

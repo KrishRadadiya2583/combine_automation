@@ -30,10 +30,10 @@ logger.process("Waiting for input...");
 
 await page.waitForSelector(reportsXpath.number_input, { visible: true , timeout: 10000 });
 
+await delay(500)
 // pick correct input (important if multiple exist)
 const input = (await page.$$(reportsXpath.number_input))[2]; // change index if needed
 
-await delay(process.env.COMMON_DELAY_ONCLICKS)
 
 await input.click(); // focus
 await input.evaluate(el => el.value = ''); // clear
@@ -43,7 +43,7 @@ logger.process("Typing: " + mobile);
 
 await delay(process.env.COMMON_DELAY_ONCLICKS)
 // type directly into element (not keyboard)
-await input.type(mobile, { delay: 10 });
+await input.type(mobile, { delay: 5 });
 
 logger.success("Number entered");
 

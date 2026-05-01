@@ -25,23 +25,35 @@ async function generateReportsAndUnlock(page) {
 
             logger.process("generate new report button click success");
 
-            // input number for new report
-            await delay(process.env.COMMON_DELAY_ONCLICKS);
-            await page.waitForSelector(reportsXpath.number_input, { visible: true });
-            await delay(process.env.COMMON_DELAY_ONCLICKS);
-            logger.process("entering number for report generation");
 
-            await page.type(reportsXpath.number_input, randomMobile(), { delay: 50 });
+logger.process("Waiting for input...");
 
-            logger.process("number entered successfully");
+await page.waitForSelector(reportsXpath.number_input, { visible: true , timeout: 10000 });
 
-            // click on submit
-            await delay(process.env.COMMON_DELAY_ONCLICKS);
-            await page.waitForSelector(reportsXpath.submit_btn, { visible: true });
-            logger.process("clicking on submit button for report generation");
-            await delay(process.env.COMMON_DELAY_ONCLICKS);
-            await page.click(reportsXpath.submit_btn);
-            logger.process("submit button click initiated");
+// pick correct input (important if multiple exist)
+const input = (await page.$$(reportsXpath.number_input))[2]; // change index if needed
+
+await delay(process.env.COMMON_DELAY_ONCLICKS)
+
+await input.click(); // focus
+await input.evaluate(el => el.value = ''); // clear
+
+const mobile = randomMobile();
+logger.process("Typing: " + mobile);
+
+await delay(process.env.COMMON_DELAY_ONCLICKS)
+// type directly into element (not keyboard)
+await input.type(mobile, { delay: 10 });
+
+logger.success("Number entered");
+
+await delay(process.env.COMMON_DELAY_ONCLICKS);
+
+// submit
+await page.waitForSelector(reportsXpath.submit_btn, { visible: true });
+
+logger.process("Click submit");
+await page.click(reportsXpath.submit_btn);
 
 
             await page.waitForSelector(reportsXpath.search_other_btn, { visible: true, timeout: 60000 });
